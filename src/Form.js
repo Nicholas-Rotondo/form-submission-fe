@@ -18,15 +18,8 @@ export function Form(props) {
     const [title, setTitle] = React.useState(null)
 
     const handleSubmit = (e) => {
-        //  let incomingTicket = {
-        //      email: email,
-        //      description: description,
-        //      status: status,
-        //      title: title,
-        //      name: name,
-        // }
 
-        axios.post('http://localhost:8080/api/ticket/postTicket', {
+        axios.post('https://form-submission-app-30a4df9f4fe4.herokuapp.com/api/ticket/postTicket', {
             email: email,
             description: description,
             status: status,
