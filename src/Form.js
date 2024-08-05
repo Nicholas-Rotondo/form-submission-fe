@@ -25,11 +25,16 @@ export function Form(props) {
             status: status,
             title: title,
             name: name,
+        }, {
+            headers: {
+                'Content-Type': 'application/json'
+            }
         }).then((response) => {
-            console.log(response)
+            console.log('Success:', response.data);
         }).catch((error) => {
-            console.log(error)
-        })
+            console.error('Error:', error.response ? error.response.data : error.message);
+            console.error('Full error object:', error);
+        });
     }
 
 
