@@ -24,7 +24,7 @@ export function Dash(props) {
     }, []);
 
     const fetchTickets = () => {
-        axios.get('http://localhost:8080/api/ticket/fetchTicket')
+        axios.get('/api/ticket/fetchTicket')
             .then((response) => {
                 console.log('Success:', response.data);
                 setTickets(response.data);
@@ -40,7 +40,7 @@ export function Dash(props) {
 
         const updatedTicket = { ...ticketToUpdate, status: newStatus };
 
-        axios.post('http://localhost:8080/api/ticket/updateTicket', updatedTicket)
+        axios.post('/api/ticket/updateTicket', updatedTicket)
             .then((response) => {
                 console.log('Ticket updated:', response.data);
                 toast({

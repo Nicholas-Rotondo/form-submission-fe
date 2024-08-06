@@ -47,7 +47,7 @@ export function Form() {
         if (!validateForm()) return;
 
         try {
-            const response = await axios.post('http://localhost:8080/api/ticket/postTicket', formData, {
+            const response = await axios.post('/api/ticket/postTicket', formData, {
                 headers: { 'Content-Type': 'application/json' }
             });
             console.log('Success:', response.data);
