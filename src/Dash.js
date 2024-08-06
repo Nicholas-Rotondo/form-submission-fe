@@ -78,33 +78,39 @@ export function Dash(props) {
                             </Tr>
                         </Thead>
                         <Tbody>
-                            {tickets.map((ticket) => (
-                                <Tr key={ticket.id}>
-                                    <Td>{ticket.email}</Td>
-                                    <Td>{ticket.description}</Td>
-                                    <Td>
-                                        <Select
-                                            size="sm"
-                                            value={ticket.status}
-                                            onChange={(e) => updateTicketStatus(ticket.id, e.target.value)}
-                                        >
-                                            <option value="Open">Open</option>
-                                            <option value="In Progress">In Progress</option>
-                                            <option value="Closed">Closed</option>
-                                        </Select>
-                                    </Td>
-                                    <Td>{ticket.name}</Td>
-                                    <Td>
-                                        <Button
-                                            colorScheme="blue"
-                                            size="sm"
-                                            onClick={() => updateTicketStatus(ticket.id, ticket.status)}
-                                        >
-                                            Save
-                                        </Button>
-                                    </Td>
+                            {Array.isArray(tickets) ? (
+                                tickets.map((ticket) => (
+                                    <Tr key={ticket.id}>
+                                        <Td>{ticket.email}</Td>
+                                        <Td>{ticket.description}</Td>
+                                        <Td>
+                                            <Select
+                                                size="sm"
+                                                value={ticket.status}
+                                                onChange={(e) => updateTicketStatus(ticket.id, e.target.value)}
+                                            >
+                                                <option value="Open">Open</option>
+                                                <option value="In Progress">In Progress</option>
+                                                <option value="Closed">Closed</option>
+                                            </Select>
+                                        </Td>
+                                        <Td>{ticket.name}</Td>
+                                        <Td>
+                                            <Button
+                                                colorScheme="blue"
+                                                size="sm"
+                                                onClick={() => updateTicketStatus(ticket.id, ticket.status)}
+                                            >
+                                                Save
+                                            </Button>
+                                        </Td>
+                                    </Tr>
+                                ))
+                            ) : (
+                                <Tr>
+                                    <Td colSpan={5} textAlign="center">No tickets available</Td>
                                 </Tr>
-                            ))}
+                            )}
                         </Tbody>
                     </Table>
                 </TableContainer>
