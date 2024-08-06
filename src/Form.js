@@ -53,7 +53,7 @@ export function Form() {
             console.log('Success:', response.data);
             toast({
                 title: "Ticket submitted.",
-                description: "We've received your ticket.",
+                description: "Would normally send email here with body: We've received your ticket. Sending",
                 status: "success",
                 duration: 5000,
                 isClosable: true,
