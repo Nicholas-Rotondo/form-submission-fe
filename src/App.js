@@ -1,11 +1,12 @@
 
 import './App.css';
-import {Form} from "./Form";
+import {Homepage} from "./Homepage";
+
 
 function App() {
   return (
     <div className="App">
-      <Form />
+    <Homepage />
     </div>
   );
 }

@@ -19,7 +19,7 @@ export function Form(props) {
 
     const handleSubmit = (e) => {
 
-        axios.post('https://form-submission-app-30a4df9f4fe4.herokuapp.com/api/ticket/postTicket', {
+        axios.post('http://localhost:8080/api/ticket/postTicket', {
             email: email,
             description: description,
             status: status,
