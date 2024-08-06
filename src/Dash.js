@@ -39,7 +39,6 @@ export function Dash(props) {
                         <Tr>
                             <Th>Email</Th>
                             <Th>Description</Th>
-                            <Th>Title</Th>
                             <Th>Status</Th>
                             <Th>Name</Th>
                         </Tr>
@@ -49,7 +48,6 @@ export function Dash(props) {
                             <Tr key={index}>
                                 <Td>{ticket.email}</Td>
                                 <Td>{ticket.description}</Td>
-                                <Td>{ticket.title}</Td>
                                 <Td>{ticket.status}</Td>
                                 <Td>{ticket.name}</Td>
                             </Tr>

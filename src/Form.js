@@ -1,121 +1,104 @@
-import React from "react";
+import React, { useState } from "react";
 import axios from "axios";
 import {
     FormControl,
     FormLabel,
     FormErrorMessage,
-    FormHelperText,
-    Input, Button,
-} from '@chakra-ui/react'
+    Input,
+    Button,
+    VStack,
+    Box,
+    Image,
+    useToast,
+    Flex,
+} from '@chakra-ui/react';
 import submit from './submit.png';
-Form.propTypes = {}
 
-export function Form(props) {
-    const [email, setEmail] = React.useState('')
-    const [name, setName] = React.useState('')
-    const [description, setDescription] = React.useState('')
-    const [status, setStatus] = React.useState(null)
-    const [title, setTitle] = React.useState(null)
+export function Form() {
+    const [formData, setFormData] = useState({
+        email: '',
+        description: '',
+        name: '',
+    });
+    const [errors, setErrors] = useState({});
+    const toast = useToast();
 
-    const handleSubmit = (e) => {
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setFormData(prev => ({ ...prev, [name]: value }));
+        if (value.trim()) {
+            setErrors(prev => ({ ...prev, [name]: '' }));
+        }
+    };
 
-        axios.post('http://localhost:8080/api/ticket/postTicket', {
-            email: email,
-            description: description,
-            status: status,
-            title: title,
-            name: name,
-        }, {
-            headers: {
-                'Content-Type': 'application/json'
+    const validateForm = () => {
+        const newErrors = {};
+        Object.keys(formData).forEach(key => {
+            if (!formData[key].trim()) {
+                newErrors[key] = `${key.charAt(0).toUpperCase() + key.slice(1)} is required`;
             }
-        }).then((response) => {
-            console.log('Success:', response.data);
-        }).catch((error) => {
-            console.error('Error:', error.response ? error.response.data : error.message);
-            console.error('Full error object:', error);
         });
-    }
+        setErrors(newErrors);
+        return Object.keys(newErrors).length === 0;
+    };
 
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        if (!validateForm()) return;
 
-    const handleInputChange = (e) => setEmail(e.target.value)
-    const handleDescriptionChange = (e) => setDescription(e.target.value)
+        try {
+            const response = await axios.post('http://localhost:8080/api/ticket/postTicket', formData, {
+                headers: { 'Content-Type': 'application/json' }
+            });
+            console.log('Success:', response.data);
+            toast({
+                title: "Ticket submitted.",
+                description: "We've received your ticket.",
+                status: "success",
+                duration: 5000,
+                isClosable: true,
+            });
+            setFormData({ email: '', description: '', name: '' });
+        } catch (error) {
+            console.error('Error:', error.response ? error.response.data : error.message);
+            toast({
+                title: "An error occurred.",
+                description: "Unable to submit your ticket.",
+                status: "error",
+                duration: 5000,
+                isClosable: true,
+            });
+        }
+    };
 
-    const handleStatusChange = (e) => setStatus(e.target.value)
-
-    const handleTitleChange = (e) => setTitle(e.target.value)
-    const handleNameChange = (e) => setName(e.target.value)
-
-
-    const isError = email === ''
     return (
-        <div style={{
-            display: "flex",
-            width: "100%",
-            height: "100vh"
-        }}>
-            {/* Left side with background color */}
-            <div style={{
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                width: "50%",
-                backgroundColor: "rgba(38, 91, 43, 0.5)"
-            }}>
-                <img src={submit} alt="Image description"
-                     style={{width: "100px", height: "100px", borderRadius: "8px"}}/>
-            </div>
-
-            {/* Right side with form */}
-            <div style={{
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                width: "50%",
-                backgroundColor: "white"
-            }}>
-                <form onSubmit={handleSubmit}>
-                    <FormControl style={{
-                        width: "70%",
-                        display: "flex",
-                        flexDirection: "column",
-                        gap: "16px",
-                        padding: "16px",
-                        borderRadius: "8px"
-                    }} isInvalid={isError}>
-                        <FormLabel>Email</FormLabel>
-                        <Input type='email' value={email} onChange={handleInputChange}/>
-
-                        <FormLabel>Description</FormLabel>
-                        <Input type='description' value={description} onChange={handleDescriptionChange}/>
-
-                        <FormLabel>Status</FormLabel>
-                        <Input type='status' value={status} onChange={handleStatusChange}/>
-
-                        <FormLabel>Title</FormLabel>
-                        <Input type='title' value={title} onChange={handleTitleChange}/>
-
-                        <FormLabel>Name</FormLabel>
-                        <Input type='name' value={name} onChange={handleNameChange}/>
-
-
-                        {!isError ? (
-                            <FormHelperText>
-                                Enter the email you'd like to receive the newsletter on.
-                            </FormHelperText>
-                        ) : (
-                            <FormErrorMessage>Email is required.</FormErrorMessage>
-                        )}
-
-                        <Button
-                            colorScheme="blue"
-                            type="submit"
-                        >
+        <Flex height="100vh">
+            <Box width="50%" bg="rgb(157, 180, 159)" display="flex" justifyContent="center" alignItems="center">
+                <Image src={submit} alt="Submit" boxSize="100px" />
+            </Box>
+            <Box width="50%" bg="white" display="flex" justifyContent="center" alignItems="center">
+                <form onSubmit={handleSubmit} style={{ width: "80%" }}>
+                    <VStack spacing={4} align="stretch">
+                        {Object.keys(formData).map((key) => (
+                            <FormControl key={key} isInvalid={!!errors[key]}>
+                                <FormLabel>{key.charAt(0).toUpperCase() + key.slice(1)}</FormLabel>
+                                <Input
+                                    name={key}
+                                    value={formData[key]}
+                                    onChange={handleChange}
+                                    type={key === 'email' ? 'email' : 'text'}
+                                    borderColor="red.300"
+                                />
+                                <FormErrorMessage>{errors[key]}</FormErrorMessage>
+                            </FormControl>
+                        ))}
+                        {errors.email && <Box color="red.500" fontSize="sm">Email is required.</Box>}
+                        <Button colorScheme="blue" type="submit" width="100%">
                             Submit
                         </Button>
-                    </FormControl>
+                    </VStack>
                 </form>
-            </div>
-        </div>
+            </Box>
+        </Flex>
     );
 }
