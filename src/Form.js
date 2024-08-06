@@ -47,7 +47,7 @@ export function Form() {
         if (!validateForm()) return;
 
         try {
-            const response = await axios.post('/api/ticket/postTicket', formData, {
+            const response = await axios.post('https://form-submission-app-30a4df9f4fe4.herokuapp.com/api/ticket/postTicket', formData, {
                 headers: { 'Content-Type': 'application/json' }
             });
             console.log('Success:', response.data);

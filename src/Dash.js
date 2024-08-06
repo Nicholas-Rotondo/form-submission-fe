@@ -24,7 +24,7 @@ export function Dash(props) {
     }, []);
 
     const fetchTickets = () => {
-        axios.get('/api/ticket/fetchTicket')
+        axios.get('https://form-submission-app-30a4df9f4fe4.herokuapp.com/api/ticket/fetchTicket')
             .then((response) => {
                 console.log('Success:', response.data);
                 setTickets(response.data);
@@ -40,7 +40,7 @@ export function Dash(props) {
 
         const updatedTicket = { ...ticketToUpdate, status: newStatus };
 
-        axios.post('/api/ticket/updateTicket', updatedTicket)
+        axios.post('https://form-submission-app-30a4df9f4fe4.herokuapp.com/api/ticket/updateTicket', updatedTicket)
             .then((response) => {
                 console.log('Ticket updated:', response.data);
                 toast({
