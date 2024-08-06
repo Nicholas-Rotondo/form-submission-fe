@@ -89,9 +89,9 @@ export function Dash(props) {
                                                 value={ticket.status}
                                                 onChange={(e) => updateTicketStatus(ticket.id, e.target.value)}
                                             >
-                                                <option value="New">Open</option>
+                                                <option value="New">New</option>
                                                 <option value="In Progress">In Progress</option>
-                                                <option value="Resolved">Closed</option>
+                                                <option value="Resolved">Resolved</option>
                                             </Select>
                                         </Td>
                                         <Td>{ticket.name}</Td>
